@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiyi.gulimall.ware.dao.PublishedMsgMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shiyi.gulimall.ware.entity.PublishedMsg">
+        <id column="id" property="id" />
+        <result column="message_id" property="messageId" />
+        <result column="content" property="content" />
+        <result column="class_type" property="classType"/>
+        <result column="exchange" property="exchange" />
+        <result column="routing_key" property="routingKey" />
+        <result column="status" property="status" />
+        <result column="retries" property="retries" />
+        <result column="delay_time" property="delayTime"/>
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="findMessageByLtStatus" resultMap="BaseResultMap">
+        select * from published_msg where `status` &lt; #{status}
+    </select>
+
+    <select id="findMessageByStatusAndDelayTime" resultMap="BaseResultMap">
+        select * from published_msg where `status` &lt; #{status}
+        and TIMESTAMPDIFF(SECOND ,`create_time`,NOW()) * 1000 > `delay_time`
+    </select>
+
+</mapper>

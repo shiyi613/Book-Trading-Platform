@@ -1,0 +1,151 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "skuTitle": "apple"
+          }
+        }
+      ],
+      "filter": [
+        {
+          "term": {
+            "catalogId": {
+              "value": "225"
+            }
+          }
+        },
+        {
+          "terms": {
+            "brandId": [
+              "1",
+              "2",
+              "6"
+            ]
+          }
+        },
+        {
+          "nested": {
+            "path": "attrs",
+            "query": {
+              "bool": {
+                "must": [
+                  {
+                    "term": {
+                      "attrs.attrId": {
+                        "value": "11"
+                      }
+                    }
+                  },
+                  {
+                    "terms": {
+                      "attrs.attrValue": [
+                        "111;2222",
+                        "2222"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "term": {
+            "hasStock": {
+              "value": "true"
+            }
+          }
+        },
+        {
+          "range": {
+            "skuPrice": {
+              "gte": 0,
+              "lte": 6000
+            }
+          }
+        }
+      ]
+    }
+  },
+  "sort": [
+    {
+      "skuPrice": {
+        "order": "desc"
+      }
+    }
+  ],
+  "from": 0,
+  "size": 1,
+  "highlight": {
+    "fields": {
+      "skuTitle": {}
+    },
+    "pre_tags": "<b style='color:red'>",
+    "post_tags": "</b>"
+  },
+  "aggs": {
+    "brand_agg": {
+      "terms": {
+        "field": "brandId",
+        "size": 10
+      },
+      "aggs": {
+        "brandName_agg": {
+          "terms": {
+            "field": "brandName",
+            "size": 10
+          }
+        },
+        "brandImg_agg": {
+          "terms": {
+            "field": "brandImg",
+            "size": 10
+          }
+        }
+      }
+    },
+    "catalog_agg": {
+      "terms": {
+        "field": "catalogId",
+        "size": 10
+      },
+      "aggs": {
+        "catalogName_agg": {
+          "terms": {
+            "field": "catalogName",
+            "size": 10
+          }
+        }
+      }
+    },
+    "attr_agg": {
+      "nested": {
+        "path": "attrs"
+      },
+      "aggs": {
+        "attrId_agg": {
+          "terms": {
+            "field": "attrs.attrId",
+            "size": 10
+          },
+          "aggs": {
+            "attrName_agg": {
+              "terms": {
+                "field": "attrs.attrName",
+                "size": 10
+              }
+            },
+            "attrValue_agg": {
+              "terms": {
+                "field": "attrs.attrValue",
+                "size": 10
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
