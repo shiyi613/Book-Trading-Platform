@@ -20,13 +20,11 @@ public class LoginInteceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        //对某些类内部远程调用放行,使用路径匹配，例如给RabbitMq的监听方法 解锁库存等
-//        String requestURI = request.getRequestURI();
-//        boolean match = new AntPathMatcher().match("/member/member/**", requestURI);
-//        if(match){
-//            return true;
-//        }
-
+        String requestURI = request.getRequestURI();
+        boolean match = new AntPathMatcher().match("/member/**/**/api", requestURI);
+        if(match){
+            return true;
+        }
 
         MemberRespVo attribute = (MemberRespVo) request.getSession().getAttribute(AuthServerConstant.LOGIN_USER);
         if(attribute != null){
@@ -39,6 +37,7 @@ public class LoginInteceptor implements HandlerInterceptor {
             response.sendRedirect("http://auth.gulimall.com/login.html");
             return false;
         }
+
     }
 
     @Override

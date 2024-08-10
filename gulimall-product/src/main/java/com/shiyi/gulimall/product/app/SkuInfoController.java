@@ -1,17 +1,17 @@
 package com.shiyi.gulimall.product.app;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Map;
-
+import com.shiyi.common.utils.PageUtils;
+import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.product.entity.SkuInfoEntity;
+import com.shiyi.gulimall.product.service.SkuInfoService;
+import com.shiyi.gulimall.product.vo.SkuInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.shiyi.gulimall.product.entity.SkuInfoEntity;
-import com.shiyi.gulimall.product.service.SkuInfoService;
-import com.shiyi.common.utils.PageUtils;
-import com.shiyi.common.utils.R;
-
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -27,7 +27,18 @@ public class SkuInfoController {
     @Autowired
     private SkuInfoService skuInfoService;
 
-    @GetMapping("/{skuId}/price")
+    @PostMapping("/saleCountAdd")
+    public R saleCountBatchAdd(@RequestBody List<SkuInfoVo> skuIds){
+        List<SkuInfoEntity> collect = skuIds.stream().map(item -> {
+            SkuInfoEntity oldEntity = skuInfoService.getById(item.getSkuId());
+            oldEntity.setSaleCount(oldEntity.getSaleCount() + item.getSaleCount());
+            return oldEntity;
+        }).collect(Collectors.toList());
+        skuInfoService.updateBatchById(collect);
+        return R.ok();
+    }
+
+    @GetMapping({"/{skuId}/price", "/{skuId}/price/api"})
     public R getPrice(@PathVariable("skuId") Long skuId){
         SkuInfoEntity entity = skuInfoService.getById(skuId);
         return R.ok().setData(entity.getPrice().toString());
@@ -37,7 +48,7 @@ public class SkuInfoController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     //@RequiresPermissions("product:skuinfo:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = skuInfoService.queryPageByCondition(params);
@@ -49,7 +60,7 @@ public class SkuInfoController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{skuId}")
+    @RequestMapping({"/info/{skuId}", "/info/{skuId}/api"})
     //@RequiresPermissions("product:skuinfo:info")
     public R info(@PathVariable("skuId") Long skuId){
 		SkuInfoEntity skuInfo = skuInfoService.getById(skuId);
@@ -60,7 +71,7 @@ public class SkuInfoController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     //@RequiresPermissions("product:skuinfo:save")
     public R save(@RequestBody SkuInfoEntity skuInfo){
 		skuInfoService.save(skuInfo);
@@ -71,7 +82,7 @@ public class SkuInfoController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     //@RequiresPermissions("product:skuinfo:update")
     public R update(@RequestBody SkuInfoEntity skuInfo){
 		skuInfoService.updateById(skuInfo);
@@ -82,7 +93,7 @@ public class SkuInfoController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("product:skuinfo:delete")
     public R delete(@RequestBody Long[] skuIds){
 		skuInfoService.removeByIds(Arrays.asList(skuIds));

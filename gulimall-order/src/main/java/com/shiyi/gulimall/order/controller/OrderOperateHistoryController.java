@@ -1,19 +1,14 @@
 package com.shiyi.gulimall.order.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.shiyi.gulimall.order.entity.OrderOperateHistoryEntity;
-import com.shiyi.gulimall.order.service.OrderOperateHistoryService;
 import com.shiyi.common.utils.PageUtils;
 import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.order.entity.OrderOperateHistoryEntity;
+import com.shiyi.gulimall.order.service.OrderOperateHistoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -33,7 +28,7 @@ public class OrderOperateHistoryController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     //@RequiresPermissions("order:orderoperatehistory:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = orderOperateHistoryService.queryPage(params);
@@ -45,7 +40,7 @@ public class OrderOperateHistoryController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping({"/info/{id}", "/info/{id}/api"})
     //@RequiresPermissions("order:orderoperatehistory:info")
     public R info(@PathVariable("id") Long id){
 		OrderOperateHistoryEntity orderOperateHistory = orderOperateHistoryService.getById(id);
@@ -56,7 +51,7 @@ public class OrderOperateHistoryController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     //@RequiresPermissions("order:orderoperatehistory:save")
     public R save(@RequestBody OrderOperateHistoryEntity orderOperateHistory){
 		orderOperateHistoryService.save(orderOperateHistory);
@@ -67,7 +62,7 @@ public class OrderOperateHistoryController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     //@RequiresPermissions("order:orderoperatehistory:update")
     public R update(@RequestBody OrderOperateHistoryEntity orderOperateHistory){
 		orderOperateHistoryService.updateById(orderOperateHistory);
@@ -78,7 +73,7 @@ public class OrderOperateHistoryController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("order:orderoperatehistory:delete")
     public R delete(@RequestBody Long[] ids){
 		orderOperateHistoryService.removeByIds(Arrays.asList(ids));

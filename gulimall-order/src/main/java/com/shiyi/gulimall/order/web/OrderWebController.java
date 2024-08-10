@@ -74,6 +74,7 @@ public class OrderWebController {
                     case "1": msg += OrderConstant.ORDER_CODE1_REASON;break;
                     case "2": msg += OrderConstant.ORDER_CODE2_REASON;break;
                     case "3": msg += OrderConstant.ORDER_CODE3_REASON;break;
+                    default : msg += e.getMessage();break;
                 }
             }
             redirectAttributes.addFlashAttribute("msg",msg);

@@ -240,20 +240,14 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
     @Override
     public void up(Long spuId) {
-
-
         //1、查出当前spuId对应的所有sku信息，品牌的名字
         List<SkuInfoEntity> skuInfoEntities = skuInfoService.getSkusBySpuId(spuId);
         List<Long> skuIds = skuInfoEntities.stream().map(SkuInfoEntity::getSkuId).collect(Collectors.toList());
-
         //查询当前sku的所有可以被用来检索的规格属性
         List<ProductAttrValueEntity> productAttrValueEntities = productAttrValueService.baseAttrListforSpu(spuId);
-        List<Long> attrIds = productAttrValueEntities.stream().map(item -> {
-            return item.getAttrId();
-        }).collect(Collectors.toList());
+        List<Long> attrIds = productAttrValueEntities.stream().map(item -> item.getAttrId()).collect(Collectors.toList());
         List<Long> attrSearchIds = attrService.selectSearchAttrs(attrIds);
         Set<Long> attrIdSet = new HashSet<>(attrSearchIds);
-
         List<SkuEsModel.Attrs> attrSearchableList = productAttrValueEntities.stream().filter(item -> {
             return attrIdSet.contains(item.getAttrId());
         }).map(item -> {
@@ -261,7 +255,6 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             BeanUtils.copyProperties(item, attrs);
             return attrs;
         }).collect(Collectors.toList());
-
         //1、远程调用，库存系统是否有库存
         Map<Long, Boolean> stockMap = null;
         try{
@@ -273,43 +266,31 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         }catch (Exception e){
             log.error("库存服务查询异常：原因{}",e);
         }
-
         //2、封装信息
         Map<Long, Boolean> finalStockMap = stockMap;
         List<SkuEsModel> skuEsModelList = skuInfoEntities.stream().map(sku -> {
-            SkuEsModel skuEsModel = new SkuEsModel();
-            skuEsModel.setSkuId(sku.getSkuId());
-            skuEsModel.setSpuId(sku.getSpuId());
-            skuEsModel.setSkuTitle(sku.getSkuTitle());
-            skuEsModel.setSkuPrice(sku.getPrice());
-            skuEsModel.setSkuImg(sku.getSkuDefaultImg());
-            skuEsModel.setSaleCount(sku.getSaleCount());
-            skuEsModel.setBrandId(sku.getBrandId());
+            SkuEsModel skuEsModel = new SkuEsModel();    skuEsModel.setSkuId(sku.getSkuId());
+            skuEsModel.setSpuId(sku.getSpuId());   skuEsModel.setSkuTitle(sku.getSkuTitle());
+            skuEsModel.setSkuPrice(sku.getPrice());  skuEsModel.setSkuImg(sku.getSkuDefaultImg());
+            skuEsModel.setSaleCount(sku.getSaleCount()); skuEsModel.setBrandId(sku.getBrandId());
             skuEsModel.setCatalogId(sku.getCatalogId());
-
             //1、设置是否有库存
             if (finalStockMap == null) {
                 skuEsModel.setHasStock(true);
             } else {
                 skuEsModel.setHasStock(finalStockMap.get(sku.getSkuId()));
             }
-
             //2、热度评分 0
             skuEsModel.setHotScore(0L);
-
             //3、查询品牌和分类的名字信息
             BrandEntity brandEntity = brandService.getById(sku.getBrandId());
             skuEsModel.setBrandName(brandEntity.getName());
             skuEsModel.setBrandImg(brandEntity.getLogo());
-
             CategoryEntity categoryEntity = categoryService.getById(sku.getCatalogId());
             skuEsModel.setCatalogName(categoryEntity.getName());
-
             //4、设置检索属性
             skuEsModel.setAttrs(attrSearchableList);
-
             return skuEsModel;
-
         }).collect(Collectors.toList());
 
         //3、将封装对象发送给elasticsearch

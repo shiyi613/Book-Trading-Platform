@@ -18,7 +18,6 @@ public class MyFeignConfig {
 
     @Bean("requestInterceptor")
     public RequestInterceptor requestInterceptor(){
-
         return new RequestInterceptor() {
             @Override
             public void apply(RequestTemplate template) {

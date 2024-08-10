@@ -28,7 +28,7 @@ public class MyRabbitMQConfig {
         arguments.put("x-dead-letter-exchange", "stock-event-exchange");
         arguments.put("x-dead-letter-routing-key","stock.release");
         // TODO:注意后面修改回来
-        arguments.put("x-message-ttl",120000);
+        arguments.put("x-message-ttl",2000000);
 
         Queue queue = new Queue("stock.delay.queue", true, false, false, arguments);
         return queue;
@@ -39,6 +39,13 @@ public class MyRabbitMQConfig {
     public Queue stockReleaseStockQueue(){
 
         Queue queue = new Queue("stock.release.stock.queue", true, false, false);
+        return queue;
+    }
+
+    @Bean
+    public Queue stockPayFinishQueue(){
+
+        Queue queue = new Queue("stock.pay.finish.queue", true, false, false);
         return queue;
     }
 
@@ -61,6 +68,14 @@ public class MyRabbitMQConfig {
 
         return new Binding("stock.delay.queue", Binding.DestinationType.QUEUE,
                 "stock-event-exchange", "stock.locked",null);
+    }
+
+
+    @Bean
+    public Binding stockPayFinishBinding(){
+
+        return new Binding("stock.pay.finish.queue", Binding.DestinationType.QUEUE,
+                "stock-event-exchange", "stock.payFinish",null);
     }
 
     @Bean

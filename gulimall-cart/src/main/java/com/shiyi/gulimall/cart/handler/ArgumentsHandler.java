@@ -9,8 +9,11 @@ public class ArgumentsHandler extends Handler{
 
     @Override
     public boolean check(CartItemVo cartItem) {
-        if(this.next != null){
-            return this.next.check(cartItem);
+
+        if(this.skipped){
+            if(this.next != null){
+                return this.next.check(cartItem);
+            }
         }
         return true;
     }

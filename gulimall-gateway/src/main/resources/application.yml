@@ -7,28 +7,35 @@ spring:
           predicates:
             - Path=/api/product/**
           filters:
-            - RewritePath=/api/(?<segment>.*),/$\{segment}
+            - RewritePath=/api/(?<segment>.*),/$\{segment}/api
 
         - id: third_party_route
           uri: lb://gulimall-third-party
           predicates:
             - Path=/api/thirdparty/**
           filters:
-            - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: order_route
+          uri: lb://gulimall-order
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}/api
 
         - id: coupon_route
           uri: lb://gulimall-coupon
           predicates:
             - Path=/api/coupon/**
           filters:
-            - RewritePath=/api/(?<segment>.*),/$\{segment}
+            - RewritePath=/api/(?<segment>.*),/$\{segment}/api
 
         - id: member_route
           uri: lb://gulimall-member
           predicates:
             - Path=/api/member/**
           filters:
-            - RewritePath=/api/(?<segment>.*),/$\{segment}
+            - RewritePath=/api/(?<segment>.*),/$\{segment}/api
 
         - id: ware_route
           uri: lb://gulimall-ware
@@ -73,6 +80,9 @@ spring:
           uri: lb://gulimall-order
           predicates:
             - Host=order.gulimall.com
+          filters:
+            - RewritePath=/(?<segment>.*)/api,/$\{segment}
+
 
         - id: gulimall_member_route
           uri: lb://gulimall-member
@@ -83,4 +93,11 @@ spring:
           uri: lb://gulimall-seckill
           predicates:
             - Host=seckill.gulimall.com
+
+        - id: gulimall_coupon_route
+          uri: lb://gulimall-coupon
+          predicates:
+            - Host=coupon.gulimall.com
+
+
 

@@ -35,7 +35,6 @@ public class OAuth2Controller {
     public String gitee(@RequestParam("code")String code, HttpSession session) throws Exception {
 
         //1、根据code换取access token
-
         Map<String, String> map = new HashMap<>();
         map.put("grant_type","authorization_code");
         map.put("code",code);
@@ -69,7 +68,6 @@ public class OAuth2Controller {
             if(r.getCode() == 0){
                 MemberRespVo data = r.getData("data", new TypeReference<MemberRespVo>() {});
                 log.info("登录成功，用户信息：{}",data.toString());
-
                 session.setAttribute("loginUser",data);
                 return "redirect:http://gulimall.com";
             }else{

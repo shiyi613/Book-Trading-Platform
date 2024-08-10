@@ -29,7 +29,8 @@ public enum BizCodeEnum {
     USERNAME_EXIST_EXCEPTION(15001,"用户名已存在"),
     PHONE_EXIST_EXCEPTION(15002,"手机号已存在"),
     LOGIN_INVALID_EXCEPTION(15003,"账号密码错误"),
-    NO_STOCK_EXCEPTION(21000,"商品库存不足");
+    NO_STOCK_EXCEPTION(21000,"商品库存不足"),
+    EXCEEDED_TIMES(22000, "优惠券领取次数超出限制");
 
     private Integer code;
     private String message;

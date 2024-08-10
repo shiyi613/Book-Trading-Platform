@@ -49,7 +49,9 @@
     <!--头部-->
     <div class="header_head">
       <div class="header_head_box">
-        <a href="/static/#" class="img"><img src="/static/index/img/logo.jpg" /></a>
+        <a href="/static/#" class="img">
+          <img src="/static/index/img/logo.png" style="height:150px;margin-top:30px;margin-left:20px" />
+        </a>
         <b class="header_head_p">
   						<a href="/static/#">
   							<img src="/static/index/img/img_05.png" style="border-radius: 50%;"/>
@@ -95,7 +97,7 @@
   					</b>
         <ul>
           <li>
-            <a th:if="${session.loginUser != null}" >你好，[[${session.loginUser.nickname}]]</a>
+            <a th:if="${session.loginUser != null}" href="http://member.gulimall.com/memberInfo.html">你好，[[${session.loginUser.nickname}]]</a>
             <a href="http://auth.gulimall.com/login.html" th:if="${session.loginUser == null}">你好，请登录</a>
           </li>
           <li>
@@ -104,6 +106,13 @@
           <span>|</span>
           <li>
             <a href="http://member.gulimall.com/memberOrder.html">我的订单</a>
+          </li>
+          <span>|</span>
+          <li>
+            <a href="http://coupon.gulimall.com/coupon/coupon/myCoupons.html">我的优惠券</a>
+          </li>
+          <li>
+            <a th:if="${session.loginUser != null}" href="http://auth.gulimall.com/logout">退出登录</a>
           </li>
 
 
@@ -122,7 +131,7 @@
         <div class="header_gw">
           <img src="/static/index/img/img_15.png" />
           <span><a href="http://cart.gulimall.com/cart.html">我的购物车</a></span>
-          <span>0</span>
+          <span id="cartNumber">0</span>
         </div>
         <div class="header_ko">
           <p>购物车中还没有商品，赶紧选购吧！</p>
@@ -162,7 +171,7 @@
             <a href="/static/#">秒杀</a>
           </li>
           <li>
-            <a href="/static/#">优惠券</a>
+            <a href="http://coupon.gulimall.com/coupon/coupon/coupon.html">优惠券</a>
           </li>
           <li>
             <a href="/static/#">闪购</a>
@@ -240,11 +249,12 @@
           <div class="header_main_right_user">
             <div class="user_info">
               <div class="user_info_tou">
-                <a href="/static/#"><img class="" src="/static/index/img/touxiang.png"></a>
+                <a href="http://member.gulimall.com/memberImg.html"><img class="" th:if="${session.loginUser == null}" src="/static/index/img/touxiang.png"></a>
+                <a href="http://member.gulimall.com/memberImg.html"><img class="" th:if="${session.loginUser != null} and ${session.loginUser.header != null}" th:src="${session.loginUser.header}"></a>
               </div>
               <div class="user_info_show">
-                <p class="">Hi, 欢迎来到!</p>
-                <p>
+                <p th:if="${session.loginUser != null}">Hi, [[${session.loginUser.nickname}]]欢迎来到!</p>
+                <p th:if="${session.loginUser == null}">
                   <a href="/static/#" class="">登录</a>
                   <a href="/static/#" class="">注册</a>
                 </p>
@@ -564,6 +574,27 @@
  
 </body>
 <script type="text/javascript">
+
+  window.addEventListener('DOMContentLoaded', (event) => {
+    fetch('/getCartNumber', {
+      credentials: 'include', // 将 credentials 设置为 'include'
+      headers: {
+        'Cookie': document.cookie // 将当前页面的所有 cookie 添加到请求头中
+      }
+    }) // 替换为正确的后端方法URL
+            .then(response => response.json())
+            .then(data => {
+              // 将数据渲染到页面上
+              $('#cartNumber').text(data);
+            })
+            .catch(error => {
+              console.error('数据回显失败:', error);
+            });
+  });
+
+
+
+
   function search() {
       var keyword=$("#searchText").val()
       window.location.href="http://search.gulimall.com/list.html?keyword="+keyword;

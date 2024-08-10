@@ -1,19 +1,14 @@
 package com.shiyi.gulimall.coupon.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.shiyi.gulimall.coupon.entity.SeckillSkuNoticeEntity;
-import com.shiyi.gulimall.coupon.service.SeckillSkuNoticeService;
 import com.shiyi.common.utils.PageUtils;
 import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.coupon.entity.SeckillSkuNoticeEntity;
+import com.shiyi.gulimall.coupon.service.SeckillSkuNoticeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -33,7 +28,7 @@ public class SeckillSkuNoticeController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     //@RequiresPermissions("coupon:seckillskunotice:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = seckillSkuNoticeService.queryPage(params);
@@ -45,7 +40,7 @@ public class SeckillSkuNoticeController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping({"/info/{id}", "/info/{id}/api"})
     //@RequiresPermissions("coupon:seckillskunotice:info")
     public R info(@PathVariable("id") Long id){
 		SeckillSkuNoticeEntity seckillSkuNotice = seckillSkuNoticeService.getById(id);
@@ -56,7 +51,7 @@ public class SeckillSkuNoticeController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     //@RequiresPermissions("coupon:seckillskunotice:save")
     public R save(@RequestBody SeckillSkuNoticeEntity seckillSkuNotice){
 		seckillSkuNoticeService.save(seckillSkuNotice);
@@ -67,7 +62,7 @@ public class SeckillSkuNoticeController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     //@RequiresPermissions("coupon:seckillskunotice:update")
     public R update(@RequestBody SeckillSkuNoticeEntity seckillSkuNotice){
 		seckillSkuNoticeService.updateById(seckillSkuNotice);
@@ -78,7 +73,7 @@ public class SeckillSkuNoticeController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("coupon:seckillskunotice:delete")
     public R delete(@RequestBody Long[] ids){
 		seckillSkuNoticeService.removeByIds(Arrays.asList(ids));

@@ -20,10 +20,16 @@ public class OrderSubmitVo {
     //防重令牌
     private String orderToken;
 
+    // 优惠金额
+    private BigDecimal couponFare;
+
     //应付总额
     private BigDecimal payPrice;
 
     //用户相关信息，直接去session拿
+
+    // 优惠券信息
+    private Long couponId;
 
     //订单备注
     private String note;

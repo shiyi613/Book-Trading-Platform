@@ -1,19 +1,14 @@
 package com.shiyi.gulimall.order.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.shiyi.gulimall.order.entity.PaymentInfoEntity;
-import com.shiyi.gulimall.order.service.PaymentInfoService;
 import com.shiyi.common.utils.PageUtils;
 import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.order.entity.PaymentInfoEntity;
+import com.shiyi.gulimall.order.service.PaymentInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -33,7 +28,7 @@ public class PaymentInfoController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     //@RequiresPermissions("order:paymentinfo:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = paymentInfoService.queryPage(params);
@@ -45,7 +40,7 @@ public class PaymentInfoController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping({"/info/{id}", "/info/{id}/api"})
     //@RequiresPermissions("order:paymentinfo:info")
     public R info(@PathVariable("id") Long id){
 		PaymentInfoEntity paymentInfo = paymentInfoService.getById(id);
@@ -56,7 +51,7 @@ public class PaymentInfoController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     //@RequiresPermissions("order:paymentinfo:save")
     public R save(@RequestBody PaymentInfoEntity paymentInfo){
 		paymentInfoService.save(paymentInfo);
@@ -67,7 +62,7 @@ public class PaymentInfoController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     //@RequiresPermissions("order:paymentinfo:update")
     public R update(@RequestBody PaymentInfoEntity paymentInfo){
 		paymentInfoService.updateById(paymentInfo);
@@ -78,7 +73,7 @@ public class PaymentInfoController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("order:paymentinfo:delete")
     public R delete(@RequestBody Long[] ids){
 		paymentInfoService.removeByIds(Arrays.asList(ids));

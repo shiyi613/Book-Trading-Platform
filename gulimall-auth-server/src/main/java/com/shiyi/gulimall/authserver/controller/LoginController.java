@@ -15,10 +15,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -100,18 +97,13 @@ public class LoginController implements HandlerInterceptor {
      */
     @PostMapping("/regist")
     public String regist(@Valid UserRegistVo vo, BindingResult result, RedirectAttributes attributes){
-
         //参数校验
         if(result.hasErrors()){
-
             Map<String, String> errors = result.getFieldErrors().stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-
             //路径映射只有get才能访问，重定向不能直接重定向到resources下，Spring MVC支持重定向携带数据
             attributes.addFlashAttribute("errors",errors);
-
             return "redirect:http://auth.gulimall.com/reg.html";
         }
-
         //校验验证码
         String code = vo.getCode();
         //从redis获取验证码
@@ -146,7 +138,6 @@ public class LoginController implements HandlerInterceptor {
         }
     }
 
-
     @PostMapping("/login")
     public String login(UserLoginVo vo, RedirectAttributes attributes, HttpSession session){
 
@@ -161,6 +152,12 @@ public class LoginController implements HandlerInterceptor {
             attributes.addFlashAttribute("errors",map);
             return "redirect:http://auth.gulimall.com/login.html";
         }
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute(AuthServerConstant.LOGIN_USER);
+        return "redirect:http://gulimall.com";
     }
 
 

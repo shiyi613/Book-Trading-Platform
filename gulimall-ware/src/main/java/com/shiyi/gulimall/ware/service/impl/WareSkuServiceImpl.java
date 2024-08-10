@@ -218,7 +218,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         }
         stockLockedTo.setDetails(details);
         // 往RabbitMQ发送消息
-        publishedMsgService.saveAndSendMsg(stockLockedTo, "stock-event-exchange", "stock.locked", 120000);
+        publishedMsgService.saveAndSendMsg(stockLockedTo, "stock-event-exchange", "stock.locked", 2000000);
 
         // 代表全部商品都锁成功了
         return true;

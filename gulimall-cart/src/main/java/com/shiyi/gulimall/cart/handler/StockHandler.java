@@ -14,11 +14,18 @@ public class StockHandler extends Handler{
 
     @Override
     public boolean check(CartItemVo cartItem) {
-        WareFeignService wareFeignService = SpringUtil.getBean(WareFeignService.class);
-        Boolean hasStock = wareFeignService.getSkuHasStock(cartItem.getSkuId(),cartItem.getCount());
-        if(hasStock != null && hasStock && this.next != null){
-            return this.next.check(cartItem);
+        if(this.skipped){
+            if(this.next != null){
+                return this.next.check(cartItem);
+            }
+        }else{
+            WareFeignService wareFeignService = SpringUtil.getBean(WareFeignService.class);
+            Boolean hasStock = wareFeignService.getSkuHasStock(cartItem.getSkuId(),cartItem.getCount());
+            if(hasStock != null && hasStock && this.next != null){
+                return this.next.check(cartItem);
+            }
+            return hasStock;
         }
-        return hasStock;
+        return true;
     }
 }

@@ -62,7 +62,6 @@ public class MallSearchServiceImpl implements MallSearchService {
         //1、准备检索请求DSL
         SearchRequest searchRequest = bulidSearchRequest(searchParam);
 
-
         try {
             //2、执行检索请求
             SearchResponse search = client.search(searchRequest, ElasticsearchConfig.COMMON_OPTIONS);

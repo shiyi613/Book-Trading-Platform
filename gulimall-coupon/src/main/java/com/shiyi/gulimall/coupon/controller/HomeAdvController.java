@@ -1,19 +1,14 @@
 package com.shiyi.gulimall.coupon.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.shiyi.gulimall.coupon.entity.HomeAdvEntity;
-import com.shiyi.gulimall.coupon.service.HomeAdvService;
 import com.shiyi.common.utils.PageUtils;
 import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.coupon.entity.HomeAdvEntity;
+import com.shiyi.gulimall.coupon.service.HomeAdvService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -33,7 +28,7 @@ public class HomeAdvController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     //@RequiresPermissions("coupon:homeadv:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = homeAdvService.queryPage(params);
@@ -45,7 +40,7 @@ public class HomeAdvController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping({"/info/{id}", "/info/{id}/api"})
     //@RequiresPermissions("coupon:homeadv:info")
     public R info(@PathVariable("id") Long id){
 		HomeAdvEntity homeAdv = homeAdvService.getById(id);
@@ -56,7 +51,7 @@ public class HomeAdvController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     //@RequiresPermissions("coupon:homeadv:save")
     public R save(@RequestBody HomeAdvEntity homeAdv){
 		homeAdvService.save(homeAdv);
@@ -67,7 +62,7 @@ public class HomeAdvController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     //@RequiresPermissions("coupon:homeadv:update")
     public R update(@RequestBody HomeAdvEntity homeAdv){
 		homeAdvService.updateById(homeAdv);
@@ -78,7 +73,7 @@ public class HomeAdvController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("coupon:homeadv:delete")
     public R delete(@RequestBody Long[] ids){
 		homeAdvService.removeByIds(Arrays.asList(ids));

@@ -1,19 +1,14 @@
 package com.shiyi.gulimall.coupon.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.shiyi.gulimall.coupon.entity.MemberPriceEntity;
-import com.shiyi.gulimall.coupon.service.MemberPriceService;
 import com.shiyi.common.utils.PageUtils;
 import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.coupon.entity.MemberPriceEntity;
+import com.shiyi.gulimall.coupon.service.MemberPriceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -33,7 +28,7 @@ public class MemberPriceController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     //@RequiresPermissions("coupon:memberprice:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = memberPriceService.queryPage(params);
@@ -45,7 +40,7 @@ public class MemberPriceController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping({"/info/{id}", "/info/{id}/api"})
     //@RequiresPermissions("coupon:memberprice:info")
     public R info(@PathVariable("id") Long id){
 		MemberPriceEntity memberPrice = memberPriceService.getById(id);
@@ -56,7 +51,7 @@ public class MemberPriceController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     //@RequiresPermissions("coupon:memberprice:save")
     public R save(@RequestBody MemberPriceEntity memberPrice){
 		memberPriceService.save(memberPrice);
@@ -67,7 +62,7 @@ public class MemberPriceController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     //@RequiresPermissions("coupon:memberprice:update")
     public R update(@RequestBody MemberPriceEntity memberPrice){
 		memberPriceService.updateById(memberPrice);
@@ -78,7 +73,7 @@ public class MemberPriceController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("coupon:memberprice:delete")
     public R delete(@RequestBody Long[] ids){
 		memberPriceService.removeByIds(Arrays.asList(ids));

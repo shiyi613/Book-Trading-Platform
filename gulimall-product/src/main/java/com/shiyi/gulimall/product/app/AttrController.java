@@ -1,19 +1,18 @@
 package com.shiyi.gulimall.product.app;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import com.shiyi.common.utils.PageUtils;
+import com.shiyi.common.utils.R;
 import com.shiyi.gulimall.product.entity.ProductAttrValueEntity;
+import com.shiyi.gulimall.product.service.AttrService;
 import com.shiyi.gulimall.product.service.ProductAttrValueService;
 import com.shiyi.gulimall.product.vo.AttrRespVo;
 import com.shiyi.gulimall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.shiyi.gulimall.product.service.AttrService;
-import com.shiyi.common.utils.PageUtils;
-import com.shiyi.common.utils.R;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -33,13 +32,13 @@ public class AttrController {
     @Autowired
     private ProductAttrValueService productAttrValueService;
 
-    @GetMapping("/base/listforspu/{spuId}")
+    @GetMapping({"/base/listforspu/{spuId}", "/base/listforspu/{spuId}/api"})
     public R baseAttrListforSpu(@PathVariable("spuId")Long spuId){
         List<ProductAttrValueEntity> entityList = productAttrValueService.baseAttrListforSpu(spuId);
         return R.ok().put("data",entityList);
     }
 
-    @GetMapping("/{attrType}/list/{catelogId}")
+    @GetMapping({"/{attrType}/list/{catelogId}", "/{attrType}/list/{catelogId}/api"})
     public R baseAttrList(@RequestParam Map<String, Object> params,
                           @PathVariable("catelogId")Long catelogId,
                           @PathVariable("attrType")String attrType){
@@ -51,7 +50,7 @@ public class AttrController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     //@RequiresPermissions("product:attr:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = attrService.queryPage(params);
@@ -63,7 +62,7 @@ public class AttrController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{attrId}")
+    @RequestMapping({"/info/{attrId}", "/info/{attrId}/api"})
     public R info(@PathVariable("attrId") Long attrId){
 		AttrRespVo respVo = attrService.getAttrInfo(attrId);
 
@@ -73,7 +72,7 @@ public class AttrController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     public R save(@RequestBody AttrVo attr){
 		attrService.saveAttr(attr);
 
@@ -84,14 +83,14 @@ public class AttrController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     public R update(@RequestBody AttrVo attr){
 		attrService.updateAttr(attr);
 
         return R.ok();
     }
 
-    @RequestMapping("/update/{spuId}")
+    @RequestMapping({"/update/{spuId}", "/update/{spuId}/api"})
     public R updateSpuAttr(@PathVariable("spuId")Long spuId,
                            @RequestBody List<ProductAttrValueEntity> entities){
         productAttrValueService.updateSpuAttr(spuId,entities);
@@ -103,7 +102,7 @@ public class AttrController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("product:attr:delete")
     public R delete(@RequestBody Long[] attrIds){
 		attrService.removeByIds(Arrays.asList(attrIds));

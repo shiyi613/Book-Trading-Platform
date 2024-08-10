@@ -5,7 +5,6 @@ import com.shiyi.common.constant.CartConstant;
 import com.shiyi.common.vo.MemberRespVo;
 import com.shiyi.gulimall.cart.to.UserInfoTo;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,7 +25,10 @@ public class CartInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        UserInfoTo userInfoTo = new UserInfoTo();
+        UserInfoTo userInfoTo = threadLocal.get();
+        if(userInfoTo == null){
+             userInfoTo = new UserInfoTo();
+        }
 
         HttpSession session = request.getSession();
         //获得当前登录用户的信息
@@ -35,25 +37,25 @@ public class CartInterceptor implements HandlerInterceptor {
         if (memberResponseVo != null) {
             //用户登录了
             userInfoTo.setUserId(memberResponseVo.getId());
-        }
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length > 0) {
-            for (Cookie cookie : cookies) {
-                //user-key
-                String name = cookie.getName();
-                if (name.equals(CartConstant.TEMP_COOKIE_NAME)) {
-                    userInfoTo.setUserKey(cookie.getValue());
-                    //标记为已是临时用户
-                    userInfoTo.setTempUser(true);
+        }else{
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null && cookies.length > 0) {
+                for (Cookie cookie : cookies) {
+                    //user-key
+                    String name = cookie.getName();
+                    if (name.equals(CartConstant.TEMP_COOKIE_NAME)) {
+                        userInfoTo.setUserKey(cookie.getValue());
+                        //标记为已是临时用户
+                        userInfoTo.setTempUser(true);
+                    }
                 }
             }
-        }
 
-        //如果没有临时用户一定分配一个临时用户
-        if (StringUtils.isEmpty(userInfoTo.getUserKey())) {
-            String uuid = UUID.randomUUID().toString();
-            userInfoTo.setUserKey(uuid);
+            //如果没有临时用户一定分配一个临时用户
+            if (StringUtils.isEmpty(userInfoTo.getUserKey())) {
+                String uuid = UUID.randomUUID().toString();
+                userInfoTo.setUserKey(uuid);
+            }
         }
 
         //目标方法执行之前

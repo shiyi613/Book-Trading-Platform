@@ -1,19 +1,14 @@
 package com.shiyi.gulimall.member.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.shiyi.gulimall.member.entity.MemberCollectSubjectEntity;
-import com.shiyi.gulimall.member.service.MemberCollectSubjectService;
 import com.shiyi.common.utils.PageUtils;
 import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.member.entity.MemberCollectSubjectEntity;
+import com.shiyi.gulimall.member.service.MemberCollectSubjectService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -33,7 +28,7 @@ public class MemberCollectSubjectController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     //@RequiresPermissions("member:membercollectsubject:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = memberCollectSubjectService.queryPage(params);
@@ -45,7 +40,7 @@ public class MemberCollectSubjectController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping({"/info/{id}", "/info/{id}/api"})
     //@RequiresPermissions("member:membercollectsubject:info")
     public R info(@PathVariable("id") Long id){
 		MemberCollectSubjectEntity memberCollectSubject = memberCollectSubjectService.getById(id);
@@ -56,7 +51,7 @@ public class MemberCollectSubjectController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     //@RequiresPermissions("member:membercollectsubject:save")
     public R save(@RequestBody MemberCollectSubjectEntity memberCollectSubject){
 		memberCollectSubjectService.save(memberCollectSubject);
@@ -67,7 +62,7 @@ public class MemberCollectSubjectController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     //@RequiresPermissions("member:membercollectsubject:update")
     public R update(@RequestBody MemberCollectSubjectEntity memberCollectSubject){
 		memberCollectSubjectService.updateById(memberCollectSubject);
@@ -78,7 +73,7 @@ public class MemberCollectSubjectController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("member:membercollectsubject:delete")
     public R delete(@RequestBody Long[] ids){
 		memberCollectSubjectService.removeByIds(Arrays.asList(ids));

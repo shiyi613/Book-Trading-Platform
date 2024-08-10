@@ -39,6 +39,7 @@ public class RabbitTemplateFactory {
         rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter);
         rabbitTemplate.setConfirmCallback(myConfirmCallback);
         rabbitTemplate.setReturnCallback(myReturnCallback);
+        rabbitTemplateMap.put(exchangeName, rabbitTemplate);
         return rabbitTemplate;
     }
 

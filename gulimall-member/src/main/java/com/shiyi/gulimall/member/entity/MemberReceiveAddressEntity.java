@@ -2,10 +2,9 @@ package com.shiyi.gulimall.member.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
-import lombok.Data;
 
 /**
  * 会员收货地址
@@ -23,46 +22,46 @@ public class MemberReceiveAddressEntity implements Serializable {
 	 * id
 	 */
 	@TableId
-	private Long id;
+	public Long id;
 	/**
 	 * member_id
 	 */
-	private Long memberId;
+	public Long memberId;
 	/**
 	 * 收货人姓名
 	 */
-	private String name;
+	public String name;
 	/**
 	 * 电话
 	 */
-	private String phone;
+	public String phone;
 	/**
 	 * 邮政编码
 	 */
-	private String postCode;
+	public String postCode;
 	/**
 	 * 省份/直辖市
 	 */
-	private String province;
+	public String province;
 	/**
 	 * 城市
 	 */
-	private String city;
+	public String city;
 	/**
 	 * 区
 	 */
-	private String region;
+	public String region;
 	/**
 	 * 详细地址(街道)
 	 */
-	private String detailAddress;
+	public String detailAddress;
 	/**
 	 * 省市区代码
 	 */
-	private String areacode;
+	public String areacode;
 	/**
 	 * 是否默认
 	 */
-	private Integer defaultStatus;
+	public Integer defaultStatus;
 
 }

@@ -1,17 +1,17 @@
 package com.shiyi.gulimall.product.app;
 
-import java.util.Arrays;
-import java.util.Map;
-
+import com.shiyi.common.utils.PageUtils;
+import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.product.entity.SpuInfoEntity;
+import com.shiyi.gulimall.product.service.SpuInfoService;
 import com.shiyi.gulimall.product.vo.SpuSaveVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.shiyi.gulimall.product.entity.SpuInfoEntity;
-import com.shiyi.gulimall.product.service.SpuInfoService;
-import com.shiyi.common.utils.PageUtils;
-import com.shiyi.common.utils.R;
-
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -27,10 +27,17 @@ public class SpuInfoController {
     @Autowired
     private SpuInfoService spuInfoService;
 
+    @RequestMapping({"/infos", "/infos/api"})
+    public List<Long> getCategoryIdsBySpuIds(@RequestParam("spuIds") List<Long> spuIds){
+        List<SpuInfoEntity> spuInfoEntities = spuInfoService.getBaseMapper().selectBatchIds(spuIds);
+        return spuInfoEntities.stream().map(item -> item.getCatalogId()).distinct().collect(Collectors.toList());
+    }
+
+
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = spuInfoService.queryPageByCondition(params);
 
@@ -38,7 +45,7 @@ public class SpuInfoController {
     }
 
 
-    @GetMapping("/skuId/{id}")
+    @GetMapping({"/skuId/{id}", "/skuId/{id}/api"})
     public R getSpuInfoBySkuId(@PathVariable("id")Long skuId){
         SpuInfoEntity spuInfoEntity =  spuInfoService.getSpuInfoBySkuId(skuId);
         return R.ok().setData(spuInfoEntity);
@@ -49,7 +56,7 @@ public class SpuInfoController {
      * @param spuId
      * @return
      */
-    @PostMapping("/{spuId}/up")
+    @PostMapping({"/{spuId}/up", "/{spuId}/up/api"})
     public R spuUp(@PathVariable("spuId") Long spuId){
         spuInfoService.up(spuId);
         return R.ok();
@@ -59,7 +66,7 @@ public class SpuInfoController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping({"/info/{id}", "/info/{id}/api"})
     //@RequiresPermissions("product:spuinfo:info")
     public R info(@PathVariable("id") Long id){
 		SpuInfoEntity spuInfo = spuInfoService.getById(id);
@@ -70,7 +77,7 @@ public class SpuInfoController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     public R save(@RequestBody SpuSaveVo vo){
 //		spuInfoService.save(spuInfo);
         spuInfoService.saveSpuInfo(vo);
@@ -80,7 +87,7 @@ public class SpuInfoController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     //@RequiresPermissions("product:spuinfo:update")
     public R update(@RequestBody SpuInfoEntity spuInfo){
 		spuInfoService.updateById(spuInfo);
@@ -91,7 +98,7 @@ public class SpuInfoController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("product:spuinfo:delete")
     public R delete(@RequestBody Long[] ids){
 		spuInfoService.removeByIds(Arrays.asList(ids));

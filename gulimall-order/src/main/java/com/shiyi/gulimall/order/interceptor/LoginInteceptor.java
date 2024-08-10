@@ -24,7 +24,9 @@ public class LoginInteceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         boolean match = new AntPathMatcher().match("/order/order/status/**", requestURI);
         boolean match1 = new AntPathMatcher().match("/payed/notify", requestURI);
-        if(match || match1){
+        boolean match2 = new AntPathMatcher().match("/order/**/**/api", requestURI);
+        boolean match3 = new AntPathMatcher().match("/order/updateMsgStatus", requestURI);
+        if(match || match1 || match2 || match3){
             return true;
         }
 
@@ -40,6 +42,7 @@ public class LoginInteceptor implements HandlerInterceptor {
             response.sendRedirect("http://auth.gulimall.com/login.html");
             return false;
         }
+
     }
 
     @Override

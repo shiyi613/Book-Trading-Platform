@@ -1,20 +1,19 @@
 package com.shiyi.gulimall.product.app;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import com.shiyi.common.utils.PageUtils;
+import com.shiyi.common.utils.R;
 import com.shiyi.common.valid.AddGroup;
 import com.shiyi.common.valid.UpdateGroup;
 import com.shiyi.common.valid.UpdateStatusGroup;
+import com.shiyi.gulimall.product.entity.BrandEntity;
+import com.shiyi.gulimall.product.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.shiyi.gulimall.product.entity.BrandEntity;
-import com.shiyi.gulimall.product.service.BrandService;
-import com.shiyi.common.utils.PageUtils;
-import com.shiyi.common.utils.R;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -33,7 +32,7 @@ public class BrandController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = brandService.queryPage(params);
 
@@ -44,7 +43,7 @@ public class BrandController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{brandId}")
+    @RequestMapping({"/info/{brandId}", "/info/{brandId}/api"})
     public R info(@PathVariable("brandId") Long brandId){
 		BrandEntity brand = brandService.getById(brandId);
 
@@ -52,7 +51,7 @@ public class BrandController {
     }
 
 
-    @GetMapping("/infos")
+    @GetMapping({"/infos", "/infos/api"})
     public R info(@RequestParam("brandIds") List<Long> brandIds){
 
         List<BrandEntity> list = brandService.getBrandsByIds(brandIds);
@@ -62,7 +61,7 @@ public class BrandController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     public R save(@Validated(AddGroup.class) @RequestBody BrandEntity brand){
 
         brandService.save(brand);
@@ -74,7 +73,7 @@ public class BrandController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     public R update(@Validated(UpdateGroup.class) @RequestBody BrandEntity brand){
 		brandService.updateDetail(brand);
 
@@ -84,7 +83,7 @@ public class BrandController {
     /**
      * 修改状态
      */
-    @RequestMapping("/update/status")
+    @RequestMapping({"/update/status", "/update/status/api"})
     public R updateStatus(@Validated(UpdateStatusGroup.class) @RequestBody BrandEntity brand){
         brandService.updateById(brand);
 
@@ -94,7 +93,7 @@ public class BrandController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     public R delete(@RequestBody Long[] brandIds){
 		brandService.removeByIds(Arrays.asList(brandIds));
 

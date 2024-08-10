@@ -1,19 +1,14 @@
 package com.shiyi.gulimall.product.app;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.shiyi.gulimall.product.entity.SkuImagesEntity;
-import com.shiyi.gulimall.product.service.SkuImagesService;
 import com.shiyi.common.utils.PageUtils;
 import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.product.entity.SkuImagesEntity;
+import com.shiyi.gulimall.product.service.SkuImagesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -33,7 +28,7 @@ public class SkuImagesController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     //@RequiresPermissions("product:skuimages:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = skuImagesService.queryPage(params);
@@ -45,7 +40,7 @@ public class SkuImagesController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping({"/info/{id}", "/info/{id}/api"})
     //@RequiresPermissions("product:skuimages:info")
     public R info(@PathVariable("id") Long id){
 		SkuImagesEntity skuImages = skuImagesService.getById(id);
@@ -56,7 +51,7 @@ public class SkuImagesController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     //@RequiresPermissions("product:skuimages:save")
     public R save(@RequestBody SkuImagesEntity skuImages){
 		skuImagesService.save(skuImages);
@@ -67,7 +62,7 @@ public class SkuImagesController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     //@RequiresPermissions("product:skuimages:update")
     public R update(@RequestBody SkuImagesEntity skuImages){
 		skuImagesService.updateById(skuImages);
@@ -78,7 +73,7 @@ public class SkuImagesController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("product:skuimages:delete")
     public R delete(@RequestBody Long[] ids){
 		skuImagesService.removeByIds(Arrays.asList(ids));

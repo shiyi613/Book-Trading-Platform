@@ -20,7 +20,7 @@
       "saleCount": {
         "type": "long"
       },
-      "hosStock": {
+      "hasStock": {
         "type": "boolean"
       },
       "hotScore": {

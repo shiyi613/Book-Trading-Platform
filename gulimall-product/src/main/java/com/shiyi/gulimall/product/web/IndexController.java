@@ -1,6 +1,7 @@
 package com.shiyi.gulimall.product.web;
 
 import com.shiyi.gulimall.product.entity.CategoryEntity;
+import com.shiyi.gulimall.product.feign.CartFeignService;
 import com.shiyi.gulimall.product.service.CategoryService;
 import com.shiyi.gulimall.product.vo.Catelog2Vo;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,17 @@ public class IndexController {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    CartFeignService cartFeignService;
+
+    @ResponseBody
+    @GetMapping("/getCartNumber")
+    public int getCartNumber(){
+        int currentUserCartNumber = cartFeignService.getCurrentUserCartNumber();
+        return currentUserCartNumber;
+    }
+
 
     @GetMapping({"/","/index.html"})
     public String indexPage(Model model){

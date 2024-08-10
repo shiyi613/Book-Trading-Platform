@@ -119,10 +119,8 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartVo getCart(){
-
         CartVo cartVo = new CartVo();
         UserInfoTo userInfoTo = CartInterceptor.threadLocal.get();
-
         if(userInfoTo.getUserId() != null){
             //已登录
             String cartkey = CART_PREFIX + userInfoTo.getUserId();
@@ -136,7 +134,6 @@ public class CartServiceImpl implements CartService {
                 //合并完成，清空临时购物车
                 clearCart(tempCartKey);
             }
-
             //获取用户购物车
             List<CartItemVo> cartItems = getCartItems(cartkey);
             if(cartItems != null && TempCartItems.size() > 0){
@@ -149,16 +146,34 @@ public class CartServiceImpl implements CartService {
                 }).collect(Collectors.toList());
             }
             cartVo.setItems(cartItems);
-
         }else{
             //未登录
             String cartkey = CART_PREFIX + userInfoTo.getUserKey();
             List<CartItemVo> cartItems = getCartItems(cartkey);
             cartVo.setItems(cartItems);
         }
-
         return cartVo;
 
+    }
+
+    /**
+     * 获取当前用户购物车的商品项数量
+     * @return
+     */
+    public int getCartNumber(){
+        UserInfoTo userInfoTo = CartInterceptor.threadLocal.get();
+        if(userInfoTo.getUserId() != null){
+            //已登录
+            String cartkey = CART_PREFIX + userInfoTo.getUserId();
+            //获取用户购物车
+            List<CartItemVo> cartItems = getCartItems(cartkey);
+            return  cartItems.size();
+        }else{
+            //未登录
+            String cartkey = CART_PREFIX + userInfoTo.getUserKey();
+            List<CartItemVo> cartItems = getCartItems(cartkey);
+            return cartItems.size();
+        }
     }
 
     /**
@@ -258,7 +273,7 @@ public class CartServiceImpl implements CartService {
             }).collect(Collectors.toList());
             return collect;
         }
-        return new ArrayList<>(0);
+        return new ArrayList<>();
     }
 
     /**

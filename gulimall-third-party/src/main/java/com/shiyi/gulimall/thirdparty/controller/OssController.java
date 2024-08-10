@@ -1,6 +1,7 @@
 package com.shiyi.gulimall.thirdparty.controller;
 
 import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
@@ -8,8 +9,12 @@ import com.shiyi.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -29,13 +34,16 @@ public class OssController {
     @Value("${spring.cloud.alicloud.access-key}")
     private String accessId;
 
+    @Value("${spring.cloud.alicloud.secret-key}")
+    private String accessKeySecret;
+
     @Value("${spring.cloud.alicloud.oss.endpoint}")
     private String endpoint;
 
     @Value("${spring.cloud.alicloud.oss.bucket}")
     private String bucket;
 
-    @RequestMapping("/oss/policy")
+    @RequestMapping("/thirdparty/oss/policy")
     public R policy(){
 
         // 填写Host地址，格式为https://bucketname.endpoint。
@@ -76,5 +84,29 @@ public class OssController {
         }
 
         return R.ok().put("data",respMap);
+    }
+
+    @RequestMapping("/oss/uploadImage")
+    public String uploadImage(@RequestParam("avatar")MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+
+        // 创建OSS客户端
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessId, accessKeySecret);
+
+        try {
+            // 将MultipartFile转换为File
+            File tempFile = File.createTempFile("temp", null);
+            file.transferTo(tempFile);
+
+            String dirName = "touxiang/" + fileName;
+            // 上传文件到OSS
+            ossClient.putObject(bucket, dirName, tempFile);
+
+            // 返回访问图片的URL
+            return "https://" + bucket + "." + endpoint + "/" + dirName;
+        } finally {
+            // 关闭OSS客户端
+            ossClient.shutdown();
+        }
     }
 }

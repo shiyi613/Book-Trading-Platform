@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.shiyi.common.utils.PageUtils;
 import com.shiyi.gulimall.coupon.entity.CouponSpuRelationEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface CouponSpuRelationService extends IService<CouponSpuRelationEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<CouponSpuRelationEntity> getSpuByCouponId(Long couponId);
 }
 

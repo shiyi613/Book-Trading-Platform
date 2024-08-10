@@ -34,6 +34,13 @@ public class CartController {
         return cartService.getCurrentUserCartItems();
     }
 
+    @ResponseBody
+    @GetMapping("/currentUserCartNumber")
+    public int getCurrentUserCartNumber(){
+
+        return cartService.getCartNumber();
+    }
+
     @GetMapping("/cart.html")
     public String cartListPage(Model model){
 

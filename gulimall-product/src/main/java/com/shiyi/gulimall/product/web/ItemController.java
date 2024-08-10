@@ -28,4 +28,14 @@ public class ItemController {
 
         return "item";
     }
+
+    // 适用于后台管理系统
+    @GetMapping("/item")
+    public String skuItemApp(Long skuId, Model model) throws ExecutionException, InterruptedException {
+
+        SkuItemVo skuItemInfo = skuInfoService.item(skuId);
+        model.addAttribute("item",skuItemInfo);
+
+        return "item";
+    }
 }

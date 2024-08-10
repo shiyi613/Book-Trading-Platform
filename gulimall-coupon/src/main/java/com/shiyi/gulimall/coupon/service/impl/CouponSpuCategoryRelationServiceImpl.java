@@ -1,16 +1,17 @@
 package com.shiyi.gulimall.coupon.service.impl;
 
-import org.springframework.stereotype.Service;
-import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shiyi.common.utils.PageUtils;
 import com.shiyi.common.utils.Query;
-
 import com.shiyi.gulimall.coupon.dao.CouponSpuCategoryRelationDao;
 import com.shiyi.gulimall.coupon.entity.CouponSpuCategoryRelationEntity;
 import com.shiyi.gulimall.coupon.service.CouponSpuCategoryRelationService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 
 @Service("couponSpuCategoryRelationService")
@@ -24,6 +25,11 @@ public class CouponSpuCategoryRelationServiceImpl extends ServiceImpl<CouponSpuC
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<CouponSpuCategoryRelationEntity> getCategoryByCouponId(Long coupunId) {
+        return this.baseMapper.selectList(new QueryWrapper<CouponSpuCategoryRelationEntity>().eq("coupon_id", coupunId));
     }
 
 }

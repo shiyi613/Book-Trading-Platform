@@ -1,20 +1,15 @@
 package com.shiyi.gulimall.product.app;
 
+import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.product.entity.CategoryEntity;
+import com.shiyi.gulimall.product.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.shiyi.gulimall.product.entity.CategoryEntity;
-import com.shiyi.gulimall.product.service.CategoryService;
-import com.shiyi.common.utils.R;
 
 
 
@@ -34,7 +29,7 @@ public class CategoryController {
     /**
      * 查出所有分类以及子分类，并以树型结构组装起来
      */
-    @RequestMapping("/list/tree")
+    @RequestMapping({"/list/tree", "/list/tree/api"})
     public R list(@RequestParam Map<String, Object> params){
 
         List<CategoryEntity> entities = categoryService.listWithTree();
@@ -47,7 +42,7 @@ public class CategoryController {
      * 信息
      */
     @Cacheable(value = "catalog",key = "'catalogId:' + #root.args[0]")
-    @RequestMapping("/info/{catId}")
+    @RequestMapping({"/info/{catId}", "/info/{catId}/api"})
     public R info(@PathVariable("catId") Long catId){
 		CategoryEntity category = categoryService.getById(catId);
 
@@ -57,7 +52,7 @@ public class CategoryController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     //@RequiresPermissions("product:category:save")
     public R save(@RequestBody CategoryEntity category){
 		categoryService.save(category);
@@ -68,7 +63,7 @@ public class CategoryController {
     /**
      * 修改
      */
-    @RequestMapping("/update/sort")
+    @RequestMapping({"/update/sort", "/update/sort/api"})
     public R updateSort(@RequestBody CategoryEntity[] category){
 
         categoryService.updateBatchById(Arrays.asList(category));
@@ -79,7 +74,7 @@ public class CategoryController {
     /**
      * 级联修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     public R update(@RequestBody CategoryEntity category){
 
         categoryService.updateCascade(category);
@@ -90,7 +85,7 @@ public class CategoryController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     public R delete(@RequestBody Long[] catIds){
 
         categoryService.removeMenuByIds(Arrays.asList(catIds));

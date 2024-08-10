@@ -1,5 +1,6 @@
 package com.shiyi.gulimall.order.vo;
 
+import com.shiyi.common.vo.CouponTradeVo;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -31,6 +32,10 @@ public class OrderConfirmVo {
 
     //防重令牌
     String orderToken;
+
+    //可用优惠券
+    List<CouponTradeVo> couponTradeVo;
+
 
     public Integer getCount(){
         Integer count = 0;

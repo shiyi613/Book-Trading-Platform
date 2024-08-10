@@ -2,13 +2,18 @@ package com.shiyi.gulimall.product.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.shiyi.common.utils.PageUtils;
+import com.shiyi.common.utils.Query;
+import com.shiyi.gulimall.product.dao.CategoryDao;
+import com.shiyi.gulimall.product.entity.CategoryEntity;
 import com.shiyi.gulimall.product.service.CategoryBrandRelationService;
+import com.shiyi.gulimall.product.service.CategoryService;
 import com.shiyi.gulimall.product.vo.Catelog2Vo;
-import jdk.nashorn.internal.ir.CallNode;
-import jodd.util.ThreadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.ThreadUtils;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +23,11 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shiyi.common.utils.PageUtils;
-import com.shiyi.common.utils.Query;
-
-import com.shiyi.gulimall.product.dao.CategoryDao;
-import com.shiyi.gulimall.product.entity.CategoryEntity;
-import com.shiyi.gulimall.product.service.CategoryService;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 @Slf4j
 @Service("categoryService")
@@ -115,7 +108,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     @Cacheable(value = "category",key = "#root.method.name")
     @Override
     public List<CategoryEntity> getLevel1Categorys() {
-        List<CategoryEntity> categoryEntities = this.baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid", 0));
+        List<CategoryEntity> categoryEntities = this.baseMapper.selectList(
+                new QueryWrapper<CategoryEntity>().eq("parent_cid", 0));
         return categoryEntities;
     }
 

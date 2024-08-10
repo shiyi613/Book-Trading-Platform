@@ -1,19 +1,14 @@
 package com.shiyi.gulimall.order.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.shiyi.gulimall.order.entity.OrderItemEntity;
-import com.shiyi.gulimall.order.service.OrderItemService;
 import com.shiyi.common.utils.PageUtils;
 import com.shiyi.common.utils.R;
+import com.shiyi.gulimall.order.entity.OrderItemEntity;
+import com.shiyi.gulimall.order.service.OrderItemService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -33,7 +28,7 @@ public class OrderItemController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping({"/list", "/list/api"})
     //@RequiresPermissions("order:orderitem:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = orderItemService.queryPage(params);
@@ -45,7 +40,7 @@ public class OrderItemController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping({"/info/{id}", "/info/{id}/api"})
     //@RequiresPermissions("order:orderitem:info")
     public R info(@PathVariable("id") Long id){
 		OrderItemEntity orderItem = orderItemService.getById(id);
@@ -56,7 +51,7 @@ public class OrderItemController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping({"/save", "/save/api"})
     //@RequiresPermissions("order:orderitem:save")
     public R save(@RequestBody OrderItemEntity orderItem){
 		orderItemService.save(orderItem);
@@ -67,7 +62,7 @@ public class OrderItemController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping({"/update", "/update/api"})
     //@RequiresPermissions("order:orderitem:update")
     public R update(@RequestBody OrderItemEntity orderItem){
 		orderItemService.updateById(orderItem);
@@ -78,7 +73,7 @@ public class OrderItemController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping({"/delete", "/delete/api"})
     //@RequiresPermissions("order:orderitem:delete")
     public R delete(@RequestBody Long[] ids){
 		orderItemService.removeByIds(Arrays.asList(ids));
